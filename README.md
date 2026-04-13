@@ -1,19 +1,43 @@
-# Mega Man X Legacy Collection `d3d10.dll` wrapper mod
+# Mega Man Battle Network Legacy Collection `d3d11.dll` wrapper mod
+![20260413054209_1](https://github.com/user-attachments/assets/0c65650e-6e1a-4ae2-9ad0-81330d86ecc4)
 
 Features:
+Working beta that//
+- Let's you use [slang-shaders](https://github.com/libretro/slang-shaders) with Capcom's Mega Man Battle Network Legacy Collection.
 
-- Let you use [slang-shaders](https://github.com/libretro/slang-shaders) with Capcom's Mega Man X Legacy Collection.
-- Fixes scaling artifact due to nearest-neighbour upscaling.
+Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
 
-Download from [here](https://github.com/xzn/d3d10-mmxlc/releases).
+// As this is the working beta there are things to consider. With the current use of RetroArch backend for shader processing, the text layer uses a keying shader to remove the opaque background elements when recompositing. 
+// KEY PS: compile inline HLSL
+{
+    static const char* key_ps_src =
+        "Texture2D t0 : register(t0);\n"
+        "SamplerState s0 : register(s0);\n"
+        "float4 main(float4 pos : SV_Position, float2 uv : TEXCOORD0) : SV_Target {\n"
+        "    float4 c = t0.Sample(s0, uv);\n"
+        "    float4 key = t0.Sample(s0, float2(0.0, 0.0));\n"
+        "    float diff = length(c.rgb - key.rgb);\n"
+        "    if (diff < 0.15) discard;\n"
+        "    return float4(c.rgb, 1.0);\n"
+        "}\n";
+
+ //Resulting in either a slight aura of the background color around text, or false positive keying out of certain text layer elements on specific shader configs. This can be tuned to taste, just raise the value of 
+ "(diff < 0.15)" to get less text aura, or lower it for less false positives in battle. 
+
+ Future implementation list :
+ - Librashader backend toggle to use the shader on the entire swapchain so text is shaded instead of being scaled up from the 960x640 composite with all it's artifacts. (++MegaBezel support)
+ - Up to 3 Shader presets loadable from start, hotkey swappable.
+ - Toggle's for shader path, widescreen mode.
+ - Custom controller and keybinds in INI.
+ - Support for screen modes other than "Max"
 
 ## Building from source
 
-Using i686-w64-mingw32-gcc (cross compiling should work too):
+Using i686-w64-mingw64-gcc (cross compiling should work too):
 
 ```bash
 # Download source
-git clone https://github.com/xzn/d3d10-mmxlc.git
+git clone https://github.com/isja13/MMBN-ShaderEngine.git
 cd d3d10-mmxlc
 git submodule update --init --recursive
 
@@ -36,49 +60,64 @@ make lto=0 dll
 
 ## Install
 
-Copy `dinput8.dll`, `interp-mod.ini`, and the `slang-shaders\` directory to your game folders, e.g.:
+Copy `dxgi.dll`, `better-filters.ini`, and the `slang-shaders\` directory to your game folders, e.g.:
 
-- `SteamLibrary\steamapps\common\Mega Man X Legacy Collection`
-- `SteamLibrary\steamapps\common\Mega Man X Legacy Collection 2`
+- `SteamLibrary\steamapps\common\MegaMan_BattleNetwork_LegacyCollection_Vol1\exe`
+- `SteamLibrary\steamapps\common\MegaMan_BattleNetwork_LegacyCollection_Vol2\exe` 
 
 ## Configuration
 
-`interp-mod.ini` contains options to configure the mod.
+`better-filters.ini` contains options to configure the mod.
 
 ```ini
-; Log API calls to interp-mod.log,
-; [logging]
+; Log API calls to better-filters.log,
+[logging]
 ; enabled=true
 ; hotkey_toggle=VK_CONTROL+O
 ; hotkey_frame=VK_CONTROL+P
 
-; Change interpolation mode and set up custom slang shaders.
 [graphics]
-; Use linear instead of point upscaling for the 2D games.
+enhanced=true
 interp=true
-; (WIP) Use linear scaling when possible for the 3D games.
-; linear=true
-; When using Type 1 filter, interp=true, and slang_shader* is not set,
-; apply Type 1 filter over and over until it reaches screen size.
-; enhanced=true
-; Custom shader for X1~X6, needs Type 1 filter set in-game.
-; slang_shader=slang-shaders/xbrz/xbr-lv2.slangp
-slang_shader_snes=slang-shaders/crt/crt-lottes-fast.slangp
-slang_shader_psone=slang-shaders/xbrz/xbrz-freescale-multipass.slangp
-; Custom shader for X7~X8.
-slang_shader_3d=slang-shaders/anti-aliasing/smaa.slangp
-; (TODO) Custom render resolution for X7~X8
-; render_3d_width=
-; render_3d_height=
-; Custom display resolution, e.g. 4K and so-on,
-; Should be 16:9 as the mod currently does not correct for aspect ratio.
-display_width=
-display_height=
+;linear=true
+                               _
+slang_shader_gba=slang-shaders/custom/ScaleFx+LCD.slangp
+                               ^
+[Favorites]
+custom/ScaleFx+LCD.slangp
+custom/psp-freescale.slangp
+custom/Xbrz-Free+LCD3x.slangp
+
+[Smoothing]
+scalefx/scalefx.slangp
+xbrz/xbrz-freescale-multipass.slangp
+presets/scalefx9-aa-blur-hazy-vibrance.slangp
+
+[CRT]
+crt/crt-royale.slangp
+crt/crt-lottes.slangp
+crt/crt-consumer.slangp
+
+[LCD]
+handheld/lcd3x.slangp
+handheld/lcd1x_psp.slangp
+handheld/lcd-shader.slangp
+
+[VHS]
+vhs/VHSPro.slangp
+vhs/ntsc-vcr.slangp
+vhs/vhs_and_crt_godot.slangp
+
+
+/////////////////////////////////////////////////
+;bezel/Mega_Bezel/Presets/MBZ_0_SMOOTH-ADV.slangp
+;custom/Stock.slangp
+;test/format.slangp
 ```
 
 If all goes well you should now be able to start the game and see the overlay on top-left of the screen showing the status of the mod.
 
-`interp-mod.ini` can be edited and have its options applied while the game is running.
+`better-filters.ini` can be edited and have its options applied while the game is running.
 
 ## License
 
@@ -90,6 +129,6 @@ Source code for this mod, without its dependencies, is available under MIT. Depe
 
 Other dependencies are more or less required:
 
-- `minhook` is used for intercepting calls to `d3d10.dll`.
+- `minhook` is used for intercepting calls to `d3d11.dll`.
 - `imgui` is used for overlay display.
 - `smhasher` is technically optional. Currently used for identifying the built-in Type 1 filter shader.
