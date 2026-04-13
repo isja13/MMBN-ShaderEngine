@@ -28,7 +28,7 @@ Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
  Future implementation list :
  - Librashader backend toggle to use the shader on the entire swapchain so text is shaded instead of being scaled up from the 960x640 composite with all it's artifacts. (++MegaBezel support)
  - Up to 3 Shader presets loadable from start, hotkey swappable.
- - Toggle's for shader path, widescreen mode.
+ - Toggles for shader path & widescreen mode.
  - Custom controller and keybinds in INI.
  - Support for screen modes other than "Max"
 
