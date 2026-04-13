@@ -8,6 +8,7 @@ Working beta that//
 Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
 
 // As this is the working beta there are things to consider. With the current use of RetroArch backend for shader processing, the text layer uses a keying shader to remove the opaque background elements when recompositing. 
+```bash
 // KEY PS: compile inline HLSL
 {
     static const char* key_ps_src =
@@ -20,7 +21,7 @@ Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
         "    if (diff < 0.15) discard;\n"
         "    return float4(c.rgb, 1.0);\n"
         "}\n";
-
+```
  //Resulting in either a slight aura of the background color around text, or false positive keying out of certain text layer elements on specific shader configs. This can be tuned to taste, just raise the value of 
  "(diff < 0.15)" to get less text aura, or lower it for less false positives in battle. 
 
