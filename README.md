@@ -1,6 +1,7 @@
 # Mega Man Battle Network Legacy Collection `d3d11.dll` wrapper mod
 ![20260413054209_1](https://github.com/user-attachments/assets/0c65650e-6e1a-4ae2-9ad0-81330d86ecc4)
 
+Based on xzn's Mega Man X Collection wrapper//
 Features:
 Working beta that//
 - Let's you use [slang-shaders](https://github.com/libretro/slang-shaders) with Capcom's Mega Man Battle Network Legacy Collection.
