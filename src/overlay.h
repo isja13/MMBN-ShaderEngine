@@ -4,7 +4,7 @@
 #include "main.h"
 
 class MyIDXGISwapChain;
-class MyID3D10Device;
+class MyID3D11Device;
 class Overlay {
     class Impl;
     Impl *impl;
@@ -31,7 +31,7 @@ public:
     void set_display(
         DXGI_SWAP_CHAIN_DESC *pSwapChainDesc,
         MyIDXGISwapChain *pSwapChain,
-        MyID3D10Device *pDevice
+        MyID3D11Device *pDevice
     );
 
     HRESULT present(

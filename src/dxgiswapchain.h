@@ -4,7 +4,8 @@
 #include "main.h"
 #include "unknown.h"
 
-class MyID3D10Texture2D;
+class MyID3D11Texture2D;
+class MyID3D11Device;
 class Overlay;
 class Config;
 
@@ -14,17 +15,17 @@ class MyIDXGISwapChain : public IDXGISwapChain {
 
 public:
     MyIDXGISwapChain(
-        DXGI_SWAP_CHAIN_DESC *pSwapChainDesc,
-        IDXGISwapChain **inner,
-        ID3D10Device **device
+        const DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
+        IDXGISwapChain** inner
     );
 
-    virtual ~MyIDXGISwapChain();
+     ~MyIDXGISwapChain();
 
     void set_overlay(Overlay *overlay);
     void set_config(Config *config);
+    void set_device(MyID3D11Device* device);
 
-    std::unordered_set<MyID3D10Texture2D *> &get_bbs();
+    std::unordered_set<MyID3D11Texture2D *> &get_bbs();
 
     IUNKNOWN_DECL(IDXGISwapChain)
 

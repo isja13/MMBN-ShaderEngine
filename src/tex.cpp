@@ -4,8 +4,8 @@ TextureAndViews::TextureAndViews() {}
 
 TextureAndViews::~TextureAndViews() {
     if (tex) tex->Release();
-    if (srv) tex->Release();
-    if (rtv) tex->Release();
+    if (srv) srv->Release();
+    if (rtv) rtv->Release();
 }
 
 TextureAndDepthViews::TextureAndDepthViews() {}

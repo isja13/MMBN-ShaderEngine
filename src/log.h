@@ -3,13 +3,13 @@
 
 #include "main.h"
 
-class MyID3D10Buffer;
-class MyID3D10Texture1D;
-class MyID3D10Texture2D;
-class MyID3D10Texture3D;
-class MyID3D10ShaderResourceView;
-class MyID3D10RenderTargetView;
-class MyID3D10DepthStencilView;
+class MyID3D11Buffer;
+class MyID3D11Texture1D;
+class MyID3D11Texture2D;
+class MyID3D11Texture3D;
+class MyID3D11ShaderResourceView;
+class MyID3D11RenderTargetView;
+class MyID3D11DepthStencilView;
 class Config;
 class Overlay;
 
@@ -100,23 +100,29 @@ struct ctor_ftor {
 };
 template<class T, class TT, class... Ts>
 using ctor_defer_ftor = ctor_ftor<T, deref_ftor<TT>, TT, Ts...>;
+
 template<class T>
-ArrayLoggerBase<decltype(deref_ftor<T>), T> ArrayLoggerDeref(T *a, size_t n) {
-    return {deref_ftor<T>, a, n};
+ArrayLoggerBase<decltype(deref_ftor<T>), T> ArrayLoggerDeref(T* a, size_t n) {
+    // If a is NULL, force n to 0 so the logger doesn't try to iterate it
+    return { deref_ftor<T>, a, a ? n : 0 };
 }
+
 template<class T>
-ArrayLoggerBase<decltype(ref_ftor<T>), T> ArrayLoggerRef(T *a, size_t n) {
-    return {ref_ftor<T>, a, n};
+ArrayLoggerBase<decltype(ref_ftor<T>), T> ArrayLoggerRef(T* a, size_t n) {
+    // If a is NULL, force n to 0
+    return { ref_ftor<T>, a, a ? n : 0 };
 }
 
 template<class T, class TT, class... Ts>
-ArrayLoggerBase<ctor_defer_ftor<T, TT>, TT> ArrayLoggerDeref(TT *a, size_t n, Ts &&... as) {
-    return {{std::forward_as_tuple(as...)}, a, n};
+ArrayLoggerBase<ctor_defer_ftor<T, TT>, TT> ArrayLoggerDeref(TT* a, size_t n, Ts &&... as) {
+    // If a is NULL, force n to 0
+    return { {std::forward_as_tuple(as...)}, a, a ? n : 0 };
 }
 
 template<template<class> class T, class TT, class... Ts>
-auto ArrayLoggerDeref(TT *a, size_t n, Ts &&... as) {
-    return ArrayLoggerDeref<decltype(T(*a))>(a, n, std::forward<Ts>(as)...);
+auto ArrayLoggerDeref(TT* a, size_t n, Ts &&... as) {
+    // If a is NULL, force n to 0
+    return ArrayLoggerDeref<decltype(T(*a))>(a, a ? n : 0, std::forward<Ts>(as)...);
 }
 
 struct StringLogger {
@@ -148,40 +154,40 @@ struct ShaderLogger {
     explicit ShaderLogger(const void *a);
 };
 
-struct D3D10_CLEAR_Logger {
+struct D3D11_CLEAR_Logger {
     UINT a;
-    explicit D3D10_CLEAR_Logger(UINT a);
+    explicit D3D11_CLEAR_Logger(UINT a);
 };
 
-struct D3D10_BIND_Logger {
+struct D3D11_BIND_Logger {
     UINT a;
-    explicit D3D10_BIND_Logger(UINT a);
+    explicit D3D11_BIND_Logger(UINT a);
 };
 
-struct D3D10_CPU_ACCESS_Logger {
+struct D3D11_CPU_ACCESS_Logger {
     UINT a;
-    explicit D3D10_CPU_ACCESS_Logger(UINT a);
+    explicit D3D11_CPU_ACCESS_Logger(UINT a);
 };
 
-struct D3D10_RESOURCE_MISC_Logger {
+struct D3D11_RESOURCE_MISC_Logger {
     UINT a;
-    explicit D3D10_RESOURCE_MISC_Logger(UINT a);
+    explicit D3D11_RESOURCE_MISC_Logger(UINT a);
 };
 
-struct D3D10_SUBRESOURCE_DATA_Logger {
-    const D3D10_SUBRESOURCE_DATA *pInitialData;
+struct D3D11_SUBRESOURCE_DATA_Logger {
+    const D3D11_SUBRESOURCE_DATA *pInitialData;
     UINT ByteWidth;
-    D3D10_SUBRESOURCE_DATA_Logger(const D3D10_SUBRESOURCE_DATA *, UINT);
+    D3D11_SUBRESOURCE_DATA_Logger(const D3D11_SUBRESOURCE_DATA *, UINT);
 };
 
-struct ID3D10Resource_id_Logger {
+struct ID3D11Resource_id_Logger {
     UINT64 id;
-    explicit ID3D10Resource_id_Logger(UINT64);
+    explicit ID3D11Resource_id_Logger(UINT64);
 };
 
-struct MyID3D10Resource_Logger {
-    const ID3D10Resource *r;
-    explicit MyID3D10Resource_Logger(const ID3D10Resource *);
+struct MyID3D11Resource_Logger {
+    const ID3D11Resource *r;
+    explicit MyID3D11Resource_Logger(const ID3D11Resource *);
 };
 
 struct DI8DEVCLASS_Logger {
@@ -429,59 +435,58 @@ if constexpr (std::is_enum_v<T>) {
     void log_item(ByteArrayLogger a);
     void log_item(CharLogger a);
     void log_item(const ShaderLogger &a);
-    void log_item(D3D10_CLEAR_Logger a);
-    void log_item(D3D10_BIND_Logger a);
-    void log_item(D3D10_CPU_ACCESS_Logger a);
-    void log_item(D3D10_RESOURCE_MISC_Logger a);
+    void log_item(D3D11_CLEAR_Logger a);
+    void log_item(D3D11_BIND_Logger a);
+    void log_item(D3D11_CPU_ACCESS_Logger a);
+    void log_item(D3D11_RESOURCE_MISC_Logger a);
     void log_item(HotkeyLogger a);
     void log_item(const GUID *guid);
-    void log_item(const D3D10_SAMPLER_DESC *sampler_desc);
-    void log_item(D3D10_FILTER a);
-    void log_item(D3D10_TEXTURE_ADDRESS_MODE a);
-    void log_item(D3D10_COMPARISON_FUNC a);
-    void log_item(const D3D10_INPUT_ELEMENT_DESC *input_element_descs);
+    void log_item(const D3D11_SAMPLER_DESC *sampler_desc);
+    void log_item(D3D11_FILTER a);
+    void log_item(D3D11_TEXTURE_ADDRESS_MODE a);
+    void log_item(D3D11_COMPARISON_FUNC a);
+    void log_item(const D3D11_INPUT_ELEMENT_DESC *input_element_descs);
     void log_item(DXGI_FORMAT a);
-    void log_item(D3D10_INPUT_CLASSIFICATION a);
-    void log_item(const D3D10_BOX *box);
-    void log_item(const D3D10_BUFFER_DESC *buffer_desc);
-    void log_item(D3D10_USAGE a);
-    void log_item(const D3D10_TEXTURE1D_DESC *desc);
-    void log_item(const D3D10_TEXTURE2D_DESC *desc);
-    void log_item(const D3D10_TEXTURE3D_DESC *desc);
+    void log_item(D3D11_INPUT_CLASSIFICATION a);
+    void log_item(const D3D11_BOX *box);
+    void log_item(const D3D11_BUFFER_DESC *buffer_desc);
+    void log_item(D3D11_USAGE a);
+    void log_item(const D3D11_TEXTURE1D_DESC *desc);
+    void log_item(const D3D11_TEXTURE2D_DESC *desc);
+    void log_item(const D3D11_TEXTURE3D_DESC *desc);
     void log_item(const DXGI_SAMPLE_DESC *a);
-    void log_item(const D3D10_SHADER_RESOURCE_VIEW_DESC *a);
-    void log_item(const D3D10_RENDER_TARGET_VIEW_DESC *a);
-    void log_item(const D3D10_DEPTH_STENCIL_VIEW_DESC *a);
-    void log_item(D3D10_PRIMITIVE_TOPOLOGY a);
-    void log_item(const D3D10_VIEWPORT *a);
-    void log_item(D3D10_SUBRESOURCE_DATA_Logger a);
-    void log_item(D3D10_MAP a);
-    void log_item(D3D10_MAP_FLAG a);
-    void log_item(ID3D10Resource_id_Logger a);
-    void log_item(const MyID3D10Buffer *a);
-    void log_item(const MyID3D10Texture1D *a);
-    void log_item(const MyID3D10Texture2D *a);
-    void log_item(const MyID3D10Texture3D *a);
-    void log_item(const MyID3D10ShaderResourceView *a);
-    void log_item(const MyID3D10RenderTargetView *a);
-    void log_item(const MyID3D10DepthStencilView *a);
-    void log_item(MyID3D10Resource_Logger a);
+    void log_item(const D3D11_SHADER_RESOURCE_VIEW_DESC *a);
+    void log_item(const D3D11_RENDER_TARGET_VIEW_DESC *a);
+    void log_item(const D3D11_DEPTH_STENCIL_VIEW_DESC *a);
+    void log_item(D3D11_PRIMITIVE_TOPOLOGY a);
+    void log_item(const D3D11_VIEWPORT *a);
+    void log_item(D3D11_SUBRESOURCE_DATA_Logger a);
+    void log_item(D3D11_MAP a);
+    void log_item(D3D11_MAP_FLAG a);
+    void log_item(ID3D11Resource_id_Logger a);
+    void log_item(const MyID3D11Buffer *a);
+    void log_item(const MyID3D11Texture1D *a);
+    void log_item(const MyID3D11Texture2D *a);
+    void log_item(const MyID3D11ShaderResourceView *a);
+    void log_item(const MyID3D11RenderTargetView *a);
+    void log_item(const MyID3D11DepthStencilView *a);
+    void log_item(MyID3D11Resource_Logger a);
     void log_item(DI8DEVCLASS_Logger a);
     void log_item(DI8DEVTYPE_Logger a);
     void log_item(DIEDFL_Logger a);
-    void log_item(const D3D10_BLEND_DESC *a);
-    void log_item(D3D10_BLEND a);
-    void log_item(D3D10_BLEND_OP a);
-    void log_item(const D3D10_DEPTH_STENCIL_DESC *a);
-    void log_item(D3D10_DEPTH_WRITE_MASK a);
-    void log_item(const D3D10_DEPTH_STENCILOP_DESC *a);
-    void log_item(D3D10_STENCIL_OP a);
-    void log_item(D3D10_SRV_DIMENSION a);
-    void log_item(D3D10_RTV_DIMENSION a);
-    void log_item(D3D10_DSV_DIMENSION a);
-    void log_item(const D3D10_TEX2D_SRV *a);
-    void log_item(const D3D10_TEX2D_RTV *a);
-    void log_item(const D3D10_TEX2D_DSV *a);
+    void log_item(const D3D11_BLEND_DESC *a);
+    void log_item(D3D11_BLEND a);
+    void log_item(D3D11_BLEND_OP a);
+    void log_item(const D3D11_DEPTH_STENCIL_DESC *a);
+    void log_item(D3D11_DEPTH_WRITE_MASK a);
+    void log_item(const D3D11_DEPTH_STENCILOP_DESC *a);
+    void log_item(D3D11_STENCIL_OP a);
+    void log_item(D3D11_SRV_DIMENSION a);
+    void log_item(D3D11_RTV_DIMENSION a);
+    void log_item(D3D11_DSV_DIMENSION a);
+    void log_item(const D3D11_TEX2D_SRV *a);
+    void log_item(const D3D11_TEX2D_RTV *a);
+    void log_item(const D3D11_TEX2D_DSV *a);
 
     void log_struct_members();
     template<class T>
@@ -595,13 +600,12 @@ private:
         log_item(LogItem<bare_t<T>>{a});
     }
 
-    template<class, bool = false>
+    template<class T, class = void>
     struct LogItem_impl : std::false_type {};
+
     template<class T>
-    struct LogItem_impl<
-        T,
-        !sizeof(LogItem<bare_t<T>>)
-    > : std::true_type {};
+    struct LogItem_impl<T, std::void_t<decltype(sizeof(LogItem<bare_t<T>>))>> : std::true_type {};
+
     template<class... Ts>
     static constexpr bool LogItem_impl_v = LogItem_impl<Ts...>::value;
 

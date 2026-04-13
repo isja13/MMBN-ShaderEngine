@@ -4,9 +4,9 @@
 #include "main.h"
 
 struct TextureAndViews {
-    ID3D10Texture2D *tex = NULL;
-    ID3D10ShaderResourceView *srv = NULL;
-    ID3D10RenderTargetView *rtv = NULL;
+    ID3D11Texture2D *tex = NULL;
+    ID3D11ShaderResourceView *srv = NULL;
+    ID3D11RenderTargetView *rtv = NULL;
     UINT width = 0;
     UINT height = 0;
     TextureAndViews();
@@ -14,14 +14,14 @@ struct TextureAndViews {
 };
 
 struct TextureAndDepthViews : TextureAndViews {
-    ID3D10Texture2D *tex_ds = NULL;
-    ID3D10DepthStencilView *dsv = NULL;
+    ID3D11Texture2D *tex_ds = NULL;
+    ID3D11DepthStencilView *dsv = NULL;
     TextureAndDepthViews();
     ~TextureAndDepthViews();
 };
 
 struct TextureViewsAndBuffer : TextureAndViews {
-    ID3D10Buffer *ps_cb = NULL;
+    ID3D11Buffer *ps_cb = NULL;
     TextureViewsAndBuffer();
     ~TextureViewsAndBuffer();
 };

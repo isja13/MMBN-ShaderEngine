@@ -20,14 +20,10 @@ public:
     std::atomic_bool enhanced = false;
     std::string slang_shader_2d;
     std::atomic_bool slang_shader_2d_updated = false;
-    std::string slang_shader_snes;
-    std::atomic_bool slang_shader_snes_updated = false;
-    std::string slang_shader_psone;
-    std::atomic_bool slang_shader_psone_updated = false;
-    std::string slang_shader_3d;
-    std::atomic_bool slang_shader_3d_updated = false;
-    UINT render_3d_width = 0;
-    UINT render_3d_height = 0;
+    std::string slang_shader_gba;
+    std::atomic_bool slang_shader_gba_updated = false;
+    std::string slang_shader_ds;
+    std::atomic_bool slang_shader_ds_updated = false;
     UINT display_width = 0;
     UINT display_height = 0;
     std::atomic_bool render_display_updated = false;

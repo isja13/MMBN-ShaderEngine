@@ -393,17 +393,14 @@ if constexpr (ENABLE_LOGGER) {
 #undef UPDATED_VAR
 
 if constexpr (ENABLE_SLANG_SHADER) {
-        GET_SET_CONFIG_UTF8_VALUE_KEY(slang_shader, slang_shader_2d);
-        GET_SET_CONFIG_UTF8_VALUE(slang_shader_snes);
-        GET_SET_CONFIG_UTF8_VALUE(slang_shader_psone);
-        GET_SET_CONFIG_UTF8_VALUE(slang_shader_3d);
+        //GET_SET_CONFIG_UTF8_VALUE_KEY(slang_shader, slang_shader_2d);
+        GET_SET_CONFIG_UTF8_VALUE(slang_shader_gba);
+        GET_SET_CONFIG_UTF8_VALUE(slang_shader_ds);
 }
 
 #define UPDATED_VAR render_display_updated
 if constexpr (ENABLE_CUSTOM_RESOLUTION) {
 if constexpr (ENABLE_CUSTOM_RESOLUTION > 1) {
-        GET_SET_CONFIG_UINT_VALUE(render_3d_width);
-        GET_SET_CONFIG_UINT_VALUE(render_3d_height);
 }
         GET_SET_CONFIG_UINT_VALUE(display_width);
         GET_SET_CONFIG_UINT_VALUE(display_height);

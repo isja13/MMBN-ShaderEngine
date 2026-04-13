@@ -1,6 +1,7 @@
 #ifndef DINPUT8_DLL_H
 #define DINPUT8_DLL_H
 
+#include <dxgi.h>
 #include "main.h"
 
 void base_dll_init(HINSTANCE hinstDLL);
