@@ -43,7 +43,7 @@ Using i686-w64-mingw64-gcc (cross compiling should work too):
 ```bash
 # Download source
 git clone https://github.com/isja13/MMBN-ShaderEngine.git
-cd d3d10-mmxlc
+cd d3d11-mmbnlc
 git submodule update --init --recursive
 
 # Create symlinks and patch files
