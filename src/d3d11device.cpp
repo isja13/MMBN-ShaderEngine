@@ -618,17 +618,17 @@ class MyID3D11Device::Impl {
         }
 
         // KEY PS: compile inline HLSL
-        {
-            static const char* key_ps_src =
-                "Texture2D t0 : register(t0);\n"
-                "SamplerState s0 : register(s0);\n"
-                "float4 main(float4 pos : SV_Position, float2 uv : TEXCOORD0) : SV_Target {\n"
-                "    float4 c = t0.Sample(s0, uv);\n"
-                "    float4 key = t0.Sample(s0, float2(0.0, 0.0));\n"
-                "    float diff = length(c.rgb - key.rgb);\n"
-                "    if (diff < 0.15) discard;\n"
-                "    return float4(c.rgb, 1.0);\n"
-                "}\n";
+{
+    static const char* key_ps_src =
+        "Texture2D t0 : register(t0);\n"
+        "SamplerState s0 : register(s0);\n"
+        "float4 main(float4 pos : SV_Position, float2 uv : TEXCOORD0) : SV_Target {\n"
+        "    float4 c = t0.Sample(s0, uv);\n"
+        "    float4 key = t0.Sample(s0, float2(0.99, 0.5));\n"
+        "    float diff = length(c.rgb - key.rgb);\n"
+        "    if (diff < 0.15) discard;\n"
+        "    return float4(c.rgb, 1.0);\n"
+        "}\n";
 
             ID3DBlob* blob = nullptr;
             ID3DBlob* err = nullptr;
