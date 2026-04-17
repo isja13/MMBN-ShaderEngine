@@ -30,7 +30,7 @@ Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
  "(diff < 0.15)" to get less text aura, or lower it for less false positives in battle. 
 
  Future implementation list :
- - Librashader backend toggle to use the shader on the entire swapchain so text is shaded instead of being scaled up from the 960x640 composite with all it's artifacts. (++MegaBezel support)
+ - Text Aura threshhold fine control.
  - Up to 3 Shader presets loadable from start, hotkey swappable.
  - Toggles for shader path & widescreen mode.
  - Custom controller and keybinds in INI.
