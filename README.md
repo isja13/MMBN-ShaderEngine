@@ -3,13 +3,13 @@
 ^^^crt-royale
 
 API Middleware Based on xzn's Mega Man X Collection wrapper//
-            ~custom shaders & graphic effects~
+            [custom shaders & graphic effects]
 
 Features:
 - Proper Scaling across various screen modes and resolutions.
 - Let's you cycle up to 3 `RetroArch` [slang-shaders](https://github.com/libretro/slang-shaders) presets at a time with Capcom's Mega Man Battle Network Legacy Collection.
 - Updated Text Blending for crisper letters, with customizable sharpness, font size, & contrast to pair with shaders.
-- Fully configurable config with User inputs, hotkeys, and Xinput controller binds.
+- Fully configurable config with User inputs, hotkeys, & Xinput controller binds.
 - Widescreen mode toggle.
   
 
@@ -17,7 +17,7 @@ Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
 
 ![20260413054209_1](https://github.com/user-attachments/assets/0c65650e-6e1a-4ae2-9ad0-81330d86ecc4)
 ^^^scalefx+lcd
-~===========================================================================
+~===========================================================================~
 
 # Usage
 Replaces the game's built in filter option with active `slang` preset file path in `.ini`
@@ -28,10 +28,13 @@ Control with hotkeys, or configure custom binds//
 ~By default:
 
 `ShaderToggle` - "`" or L.stick      (universal mod-wide killswitch and A/B toggle)
-Previous/Next - "1/2" or R.stick     (cycle through selected presets in real time)
-Widescreen - "3" [must bind pad]     (toggles 16:9 screen fill, when in Max size)
+
+`Previous/Next` - "1/2" or R.stick     (cycle through selected presets in real time)
+
+`Widescreen` - "3" [must bind pad]     (toggles 16:9 screen fill, when in Max size)
 
 `Text Aura` - "-/+"      ^^^        (Universal Font Size)
+
 `Sharpness` 0 "[/]"       ^         (Text Bold/Contrast)
 
 // Because the game binds it's own controller buttons, I don't know what inputs a given user can have free so gamepad bindings must be handled by individual config.
