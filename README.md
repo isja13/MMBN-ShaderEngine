@@ -16,7 +16,7 @@ Features:
 Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
 
 ![20260413054209_1](https://github.com/user-attachments/assets/0c65650e-6e1a-4ae2-9ad0-81330d86ecc4)
-^^^scalefx+lcd
+^^^scalefx+lcd  [screenshots not release build]
 ~===========================================================================~
 
 # Usage
