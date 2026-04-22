@@ -92,7 +92,7 @@ enhanced=true
 linear=false
 interp=true
                              _
-slang_shader_1=slang-shaders/crt/crt-royale.slangp
+slang_shader_1=slang-shaders/scalefx/scalefx.slangp
                              ^
 slang_shader_2=slang-shaders/custom/ScaleFx+LCD.slangp
                              ^
