@@ -1,0 +1,77 @@
+#ifndef OVERLAY_H
+#define OVERLAY_H
+
+#include "main.h"
+
+class MyIDXGISwapChain;
+class MyID3D11Device;
+class Overlay {
+    class Impl;
+    Impl *impl;
+
+    void push_text_base(std::string &&s);
+    template<class T, class... Ts>
+    std::enable_if_t<std::is_convertible_v<T, std::string>> push_text_base(std::string &&s, T &&a, Ts &&... as) {
+        s += std::string(std::forward<T>(a));
+        push_text_base(std::move(s), std::forward<Ts>(as)...);
+    }
+    template<class T, class... Ts>
+    std::enable_if_t<std::is_convertible_v<T, std::wstring>> push_text_base(std::string &&s, T &&a, Ts &&... as) {
+        push_text_base(
+            std::move(s),
+            std::wstring_convert<std::codecvt_utf8<wchar_t>>{}.to_bytes(std::wstring(std::forward<T>(a))),
+            std::forward<Ts>(as)...
+        );
+    }
+
+public:
+    Overlay();
+    ~Overlay();
+
+    void set_display(
+        DXGI_SWAP_CHAIN_DESC *pSwapChainDesc,
+        MyIDXGISwapChain *pSwapChain,
+        MyID3D11Device *pDevice
+    );
+
+    HRESULT present(
+        UINT SyncInterval,
+        UINT Flags
+    );
+
+    HRESULT resize_buffers(
+        UINT buffer_count,
+        UINT width,
+        UINT height,
+        DXGI_FORMAT format,
+        UINT flags
+    );
+
+    template<class... Ts>
+    void push_text(Ts &&... as) {
+        std::string s;
+        push_text_base(std::move(s), std::forward<Ts>(as)...);
+    }
+    void update_text_base(std::string&& s, const std::string& prefix);
+
+    void update_text(const char* text, const char* prefix) {
+        update_text_base(std::string(text), std::string(prefix));
+    }
+};
+
+extern struct OverlayPtr {
+    Overlay *overlay;
+    OverlayPtr(Overlay *overlay = NULL) : overlay(overlay) {}
+    template<class... As>
+    void operator()(const As &... as) const {
+        if (overlay) overlay->push_text(as...);
+    }
+    OverlayPtr& operator=(Overlay *overlay) {
+        this->overlay = overlay;
+        return *this;
+    }
+    Overlay *operator->() const { return *this; }
+    operator Overlay *() const { return overlay; }
+} default_overlay;
+
+#endif

@@ -1,0 +1,30 @@
+#ifndef D3D11DEVICECHILD_H
+#define D3D11DEVICECHILD_H
+
+#include "unknown.h"
+
+#define ID3D11DEVICECHILD_DECL(b) \
+    virtual void STDMETHODCALLTYPE GetDevice( \
+        ID3D11Device **ppDevice \
+    ); \
+ \
+    virtual HRESULT STDMETHODCALLTYPE GetPrivateData( \
+        REFGUID guid, \
+        UINT *pDataSize, \
+        void *pData \
+    ); \
+ \
+    virtual HRESULT STDMETHODCALLTYPE SetPrivateData( \
+        REFGUID guid, \
+        UINT DataSize, \
+        const void *pData \
+    ); \
+ \
+    virtual HRESULT STDMETHODCALLTYPE SetPrivateDataInterface( \
+        REFGUID guid, \
+        const IUnknown *pData \
+    ); \
+ \
+    IUNKNOWN_DECL(b)
+
+#endif
