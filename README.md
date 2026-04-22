@@ -20,7 +20,7 @@ Download from [here](https://github.com/isja13/MMBN-ShaderEngine/releases).
 ~===========================================================================~
 
 # Usage
-Replaces the game's built in filter option with active `slang` preset file path in `.ini`
+Replaces the game's built-in filter option with active `slang` preset file path in `.ini`
 <img width="2560" height="1440" alt="20260420053737_1" src="https://github.com/user-attachments/assets/f2ebc321-c04c-4e84-a1b3-5df47a19ad61" />
 xbrz-freescale-multipass^^^
 
