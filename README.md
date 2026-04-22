@@ -33,7 +33,7 @@ Control with hotkeys, or configure custom binds//
 
 `Text Aura` - "-/+"      ^^^        (Universal Font Size)
 
-`Sharpness` 0 "[/]"       ^         (Text Bold/Contrast)
+`Sharpness` - "[/]"       ^         (Text Bold/Contrast)
 
 // Because the game binds it's own controller buttons, I don't know what inputs a given user can have free so gamepad bindings must be handled by individual config.
 <img width="2560" height="1440" alt="20260420054116_1" src="https://github.com/user-attachments/assets/3aaa5348-c97b-43c7-990c-07a978372c22" />
